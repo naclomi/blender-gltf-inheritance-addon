@@ -50,6 +50,8 @@ class glTF2ImportUserExtension:
                 for child in arma.children:
                     visit(child)
 
+                bpy.ops.object.mode_set(mode="OBJECT")
+
                 for idx in bone_ids:
                     node = gltf.data.nodes[idx]
                     vnode = gltf.vnodes[idx]
@@ -81,11 +83,13 @@ class glTF2ExportUserExtension:
         # This is the last hook that runs, where we want to reset
         # any blender object values we temporarily changed
         # TODO: It seems undocumented, make sure it's ok to use
+        bpy.ops.object.mode_set(mode="OBJECT")
         for object, attr, value in self.changed_values:
             setattr(object, attr, value)
 
-
     def gather_joint_hook(self, gltf2_node, blender_bone, export_settings):
+        bpy.ops.object.mode_set(mode="OBJECT")
+
         inherit_rotation = blender_bone.bone.use_inherit_rotation
         inherit_scale = blender_bone.bone.inherit_scale != "NONE"
         if not inherit_rotation or not inherit_scale:
@@ -99,11 +103,11 @@ class glTF2ExportUserExtension:
             # Temporarily change all inheritance properties to true, to
             # prevent the vanilla glTF exporter plugin code from baking the
             # inheritance properties directly into the animation data
-            # TODO: double-check this is actually working
+            # TODO: double-check this actually produces the desired results
             self.preserve_value(blender_bone.bone, "use_inherit_rotation")
-            blender_bone.bone.use_inherit_rotation = False
+            blender_bone.bone.use_inherit_rotation = True
             self.preserve_value(blender_bone.bone, "inherit_scale")
-            blender_bone.bone.inherit_scale = "NONE"
+            blender_bone.bone.inherit_scale = "FULL"
 
             gltf2_node.extensions[glTF_extension_name] = ext_props
         
