@@ -1,6 +1,6 @@
 bl_info = {
         "name": "glTF node inheritance extensions",
-        "description": "Add support for explicitly exporting node inheritance properties in glTF files",
+        "description": "Add support for explicitly exporting node TSR inheritance properties in glTF files",
         "author": "NL Alterman",
         "version": (1, 0),
         "blender": (3, 1, 0),
@@ -25,7 +25,7 @@ if locals().get('loaded'):
             globals()[name] = reload(module)
     del reload, modules
 
-glTF_extension_name = "EXT_transformation_inheritance"
+glTF_extension_name = "EXT_node_tsr_inheritance"
 
 class glTF2ImportUserExtension:
     def __init__(self):
