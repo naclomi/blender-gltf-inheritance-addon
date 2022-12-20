@@ -109,9 +109,11 @@ class glTF2ExportUserExtension:
             self.preserve_value(blender_bone.bone, "inherit_scale")
             blender_bone.bone.inherit_scale = "FULL"
 
-            gltf2_node.extensions[glTF_extension_name] = ext_props
-        
-
+            gltf2_node.extensions[glTF_extension_name] = self.Extension(
+                name=glTF_extension_name,
+                extension=ext_props,
+                required=True
+            )
 
 def register():
     from io_scene_gltf2 import bl_info as base_info
